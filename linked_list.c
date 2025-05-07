@@ -33,4 +33,24 @@ struct Node *delete_node(struct Node **head) {
 }
 
 
+int delete_node_having_data(struct Node **head, void *data) {
+    struct Node *pos, *prev = *head;
+
+    for_each(pos, *head) {
+        if (pos->data == data) {
+            if (pos == *head) {
+                *head = (*head)->next;
+                free(pos);
+                return 0;
+            }
+            prev->next = pos->next;
+            free(pos);
+            return 0;
+        }
+        prev = pos;
+    }
+    return -1;
+}
+
+
 
