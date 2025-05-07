@@ -11,6 +11,43 @@ struct Chain *create_chain(char *chain_name) {
     return chain;
 }
 
+int insert_chain_to_list(struct Chain **head, struct Chain *target_chain) {
+    struct Chain *pos;
+
+    if(target_chain == NULL) {
+        return -1;
+    }
+
+    if (*head == NULL) {
+        *head = target_chain;
+        return 0;
+    }
+
+    for_each_c(pos, *head) {
+        if (pos->next == NULL) {
+            pos->next = target_chain;
+            return 0;
+        }
+    }
+
+    return -1;
+}
+
+int delete_chain_from_list(struct Chain **head, char *chain_name) {
+    if (*head == NULL || chain_name == NULL) {
+        return -1;
+    }
+    struct Chain *pos, *prev = *head;;
+    for_each_c(pos, *head) {
+        if (strcmp(pos->chain_name, chain_name) == 0) {
+            prev->next = pos->next;
+            free(pos);
+        }
+        prev = pos;
+    }
+    return 0;
+}
+
 int insert_key_to_chain(struct Chain *target_chain, struct Key *key) {
     struct Node *target_chain_list = target_chain->node_list;
 
