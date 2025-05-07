@@ -15,6 +15,8 @@ struct Chain{
 };
 
 struct Chain *create_chain(char *chain_name);
+int insert_chain_to_list(struct Chain **head, struct Chain *target_chain);
+int delete_chain_from_list(struct Chain **head, char *chain_name);
 int insert_key_to_chain(struct Chain *target_chain, struct Key *key);
 int delete_key_from_chain(struct Chain *target_chain, struct Key *key);
 struct Key *get_key_from_chain(struct Chain *target_chain, char *key_name);

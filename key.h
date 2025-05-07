@@ -11,6 +11,5 @@ struct Key {
 
 struct Key *create_key(char *name, char *value);
 int delete_key(struct Key *key);
-int delete_node_having_data(struct Node **head, void *data);
 
 #endif

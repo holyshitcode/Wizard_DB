@@ -10,6 +10,7 @@ struct Node {
 
 struct Node *create_node(void *data);
 int  insert_node(struct Node **head, void *data);
-struct Node *delete_node(struct Node **head);
+struct  Node *delete_node(struct Node **head);
+int delete_node_having_data(struct Node **head, void *data);
 
 #endif
