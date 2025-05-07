@@ -3,4 +3,6 @@ project(wizard_db C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(wizard_db main.c)
+add_executable(wizard_db main.c
+        linked_list.c
+        key.c)
