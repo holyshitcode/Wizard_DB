@@ -11,6 +11,28 @@ struct Key *create_key(char *name, char *value) {
     return create_key;
 }
 
+int insert_key_into_key_list(struct Key_List **head, struct Key *key) {
+    struct Key_List *key_list = malloc(sizeof(struct Key_List));
+    if (key_list == NULL) {
+        return -1;
+    }
+
+    key_list->key = key;
+    key_list->next = NULL;
+
+    if (*head == NULL) {
+        *head = key_list;
+    } else {
+        struct Key_List *current = *head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = key_list;
+    }
+
+    return 0;
+}
+
 int delete_key(struct Key *key) {
     free(KEY_VALUE(key));
     free(key);
