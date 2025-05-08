@@ -7,4 +7,5 @@ add_executable(wizard_db main.c
         linked_list.c
         key.c
         chain.c
-        data.c)
+        data.c
+        database.c)
