@@ -61,7 +61,7 @@ int delete_chain_from_database(char *database_name, char *chain_name) {
     return 0;
 }
 
-int insert_key_to_chain(char *database_name, char *chain_name, struct Key *key) {
+int insert_key_to_chain_db(char *database_name, char *chain_name, struct Key *key) {
     struct Database *found_database = get_database_by_name(database_name);
     if (found_database == NULL) {
         return -1;
@@ -75,7 +75,7 @@ int insert_key_to_chain(char *database_name, char *chain_name, struct Key *key) 
     return 0;
 }
 
-int delete_key_from_chain(char *database_name, char *chain_name, char *key_name) {
+int delete_key_from_chain_db(char *database_name, char *chain_name, char *key_name) {
     struct Database *found_database = get_database_by_name(database_name);
     if (found_database == NULL) {
         return -1;
@@ -133,5 +133,7 @@ int delete_database(char *database_name) {
     }
     return -1;
 }
+
+
 
 
