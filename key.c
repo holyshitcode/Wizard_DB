@@ -38,3 +38,14 @@ int delete_key(struct Key *key) {
     free(key);
     return 0;
 }
+
+void free_key_list(struct Key_List *head) {
+    struct Key_List *current = head;
+    struct Key_List *next;
+
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+}

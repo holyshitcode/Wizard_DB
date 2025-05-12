@@ -2,6 +2,7 @@
 #define DATABASE_H
 
 #include "chain.h"
+#include "key.h"
 #define DATABASE_MAX 100
 
 extern struct Database *database_list[DATABASE_MAX];
@@ -19,6 +20,8 @@ int insert_key_to_chain_db(char *database_name, char *chain_name, struct Key *ke
 int delete_key_from_chain_db(char *database_name, char *chain_name, char *key_name);
 void free_database(struct Database *database);
 int delete_database(char *database_name);
+struct Key_List *get_keys_from_chain_db_str_contains(char *database_name, char *contains);
+struct Key_List *get_keys_from_chain_db_same_str(char *database_name, char *exact_string);
 
 
 

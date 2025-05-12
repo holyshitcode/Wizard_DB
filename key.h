@@ -19,5 +19,6 @@ struct Key_List {
 int insert_key_into_key_list(struct Key_List **head, struct Key *key);
 struct Key *create_key(char *name, char *value);
 int delete_key(struct Key *key);
+void free_key_list(struct Key_List *head);
 
 #endif

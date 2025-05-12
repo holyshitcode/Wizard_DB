@@ -134,13 +134,13 @@ int delete_database(char *database_name) {
     return -1;
 }
 
-struct Key_List *get_keys_from_chain_db(char *database_name, char *contains) {
+struct Key_List *get_keys_from_chain_db_str_contains(char *database_name, char *contains) {
     struct Database *found_database = get_database_by_name(database_name);
     struct Node *found_node;
     struct Key_List *key_list = NULL;
     struct Key *current_key;
     struct Chain *chain_pos;
-    int i = 0;
+
     if (found_database == NULL) {
         return NULL;
     }
@@ -148,6 +148,27 @@ struct Key_List *get_keys_from_chain_db(char *database_name, char *contains) {
         for_each(found_node, chain_pos->node_list) {
             current_key = found_node->data;
             if(strstr(current_key->value,contains) != NULL) {
+                insert_key_into_key_list(&key_list,current_key);
+            }
+        }
+    }
+    return key_list;
+}
+
+struct Key_List *get_keys_from_chain_db_same_str(char *database_name, char *exact_string) {
+    struct Database *found_database = get_database_by_name(database_name);
+    struct Node *found_node;
+    struct Key_List *key_list = NULL;
+    struct Key *current_key;
+    struct Chain *chain_pos;
+
+    if (found_database == NULL) {
+        return NULL;
+    }
+    for_each_c(chain_pos, found_database->chain_list) {
+        for_each(found_node, chain_pos->node_list) {
+            current_key = found_node->data;
+            if(strcmp(current_key->value,exact_string) == 0) {
                 insert_key_into_key_list(&key_list,current_key);
             }
         }
