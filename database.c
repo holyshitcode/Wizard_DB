@@ -8,6 +8,11 @@ int database_count = 0;
 
 
 int create_database(char *database_name) {
+    //duplicate exception
+    if (get_database_by_name(database_name) != NULL) {
+        return -1;
+    }
+
     if (database_count >= DATABASE_MAX) {
         return -1;
     }
@@ -32,9 +37,26 @@ struct Database *get_database_by_name(char *database_name) {
     return NULL;
 }
 
-
+static struct Chain *get_chain_from_database_by_name(char* database_name, char *chain_name) {
+    struct Database *target_database = get_database_by_name(database_name);
+    struct Chain *pos;
+    if (target_database == NULL) {
+        return NULL;
+    }
+    for_each_c(pos, target_database->chain_list) {
+        if (strcmp(pos->chain_name, chain_name) == 0) {
+            return pos;
+        }
+    }
+    return NULL;
+}
 
 int create_chain_into_database(char *database_name, char *chain_name) {
+
+    //duplicate exception
+    if(get_chain_from_database_by_name(database_name, chain_name) != NULL) {
+        return -1;
+    }
     struct Database *created_database = get_database_by_name(database_name);
     if (created_database == NULL) {
         return -1;
@@ -49,6 +71,8 @@ int create_chain_into_database(char *database_name, char *chain_name) {
     return 0;
 }
 
+
+
 int delete_chain_from_database(char *database_name, char *chain_name) {
     struct Database *found_database = get_database_by_name(database_name);
     if (found_database == NULL) {
@@ -61,8 +85,27 @@ int delete_chain_from_database(char *database_name, char *chain_name) {
     return 0;
 }
 
+static struct Key *get_key_from_chain_by_name(struct Chain *target_chain,  char *key_name) {
+    struct Chain *pos;
+    struct Node *target_node;
+    for_each_c(pos,target_chain) {
+        for_each(target_node,pos->node_list) {
+            struct Key *target_key = target_node->data;
+            if(strcmp(KEY_NAME(target_key), key_name) == 0) {
+                return target_key;
+            }
+        }
+    }
+    return NULL;
+}
+
 int insert_key_to_chain_db(char *database_name, char *chain_name, struct Key *key) {
     struct Database *found_database = get_database_by_name(database_name);
+    struct Chain *target_chain = get_chain_from_database_by_name(database_name, chain_name);
+    //duplicate exception
+    if (get_key_from_chain_by_name(target_chain,KEY_NAME(key))) {
+        return -1;
+    }
     if (found_database == NULL) {
         return -1;
     }
@@ -174,6 +217,28 @@ struct Key_List *get_keys_from_chain_db_same_str(char *database_name, char *exac
         }
     }
     return key_list;
+}
+
+struct Key *get_key_from_chain_db_by_name(char *database_name, char *key_name) {
+    struct Database *found_database = get_database_by_name(database_name);
+    struct Node *found_node;
+    struct Key *current_key;
+    struct Chain *chain_pos;
+
+    if (found_database == NULL) {
+        return NULL;
+    }
+
+    for_each_c(chain_pos, found_database->chain_list) {
+        for_each(found_node, chain_pos->node_list) {
+            current_key = found_node->data;
+            if(strcmp(KEY_NAME(current_key), key_name) == 0) {
+                return current_key;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 

@@ -45,6 +45,8 @@ int main(void) {
         printf("%s,%s\n",KEY_NAME(pos->key),KEY_VALUE(pos->key));
     }
     free_key_list(key_list);
+    struct Key *key3 = get_key_from_chain_db_by_name("test.db","test_key2");
+    printf("%s\n",KEY_NAME(key3));
     // struct Key_List *key_list2 =get_keys_from_chain_db_str_contains("test.db","value");
     // struct Key_List *pos2;
     // for_each_key(pos2,key_list2) {
