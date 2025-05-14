@@ -3,6 +3,7 @@
 
 #include "chain.h"
 #include "key.h"
+#include "index_tree.h"
 #define DATABASE_MAX 100
 
 extern struct Database *database_list[DATABASE_MAX];
@@ -12,7 +13,9 @@ struct Database {
     char database_name[25];
     struct Chain *chain_list;
     //tree pointer will be added
+    long index_counter;
     //indexing base counter will be added
+    struct Tree_Node *root;
 };
 struct Database *get_database_by_name(char *database_name);
 int create_database(char *database_name);
