@@ -13,6 +13,23 @@ int database_count = 0;
  * 데이터베이스 인덱스조회해서 duplicate 검사하는 함수
  */
 
+struct Key *create_key_db(char *database_name, char *key_name, char *key_value) {
+    struct Database *target_database = get_database_by_name(database_name);
+    if (target_database == NULL) {
+        return NULL;
+    }
+    struct Key *created_key = create_key(key_name, key_value);
+    if (created_key == NULL) {
+        return NULL;
+    }
+    target_database->index_counter++;
+    created_key->primary_key = target_database->index_counter;
+    if(insert_tree_node(&target_database->root, target_database->index_counter) == 0) {
+        return created_key;
+    }
+
+}
+
 int create_database(char *database_name) {
     //duplicate exception
     if (get_database_by_name(database_name) != NULL) {
@@ -28,6 +45,9 @@ int create_database(char *database_name) {
     }
     strcpy(created_database->database_name, database_name);
     created_database->chain_list = NULL;
+    //index tree
+    created_database->root =  NULL;
+    created_database->index_counter = -1;
     database_list[database_count++] = created_database;
     return 0;
 }
@@ -109,7 +129,10 @@ int insert_key_to_chain_db(char *database_name, char *chain_name, struct Key *ke
     struct Database *found_database = get_database_by_name(database_name);
     struct Chain *target_chain = get_chain_from_database_by_name(database_name, chain_name);
     //duplicate exception(will be changed by indexing)
-    if (get_key_from_chain_by_name(target_chain,KEY_NAME(key))) {
+    // if (get_key_from_chain_by_name(target_chain,KEY_NAME(key))) {
+    //     return -1;
+    // }
+    if (search_tree_node(&found_database->root, key->primary_key) != NULL) {
         return -1;
     }
     if (found_database == NULL) {
@@ -133,6 +156,7 @@ int delete_key_from_chain_db(char *database_name, char *chain_name, char *key_na
     for_each_c(pos, found_database->chain_list) {
         if (strcmp(pos->chain_name, chain_name) == 0) {
             struct Key *target_key = get_key_from_chain(pos, key_name);
+            delete_tree_node(&found_database->root, target_key->primary_key);
             delete_node_having_key(&pos->node_list, target_key);
             return 0;
         }
