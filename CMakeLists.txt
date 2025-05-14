@@ -8,4 +8,5 @@ add_executable(wizard_db main.c
         key.c
         chain.c
         data.c
-        database.c)
+        database.c
+        index_tree.c)

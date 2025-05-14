@@ -31,8 +31,9 @@ int main(void) {
     struct Key *key = create_key("test_key","test_value");
     struct Key *key2 = create_key("test_key2","test_value2");
     insert_key_to_chain_db("test.db","test_chain",key);
-    insert_key_to_chain_db("test.db","test_chain",key2);
-    // insert_key_to_chain_db("test.db","test_chain2",key);
+    int duplicate = insert_key_to_chain_db("test.db","test_chain",key);
+    insert_key_to_chain_db("test.db","test_chain2",key);
+    printf("test_duplicate=%d\n",duplicate);
     insert_key_to_chain_db("test.db","test_chain2",key2);
 
     struct Database *database = database_list[0];
@@ -47,12 +48,12 @@ int main(void) {
     free_key_list(key_list);
     struct Key *key3 = get_key_from_chain_db_by_name("test.db","test_key2");
     printf("%s\n",KEY_NAME(key3));
-    // struct Key_List *key_list2 =get_keys_from_chain_db_str_contains("test.db","value");
-    // struct Key_List *pos2;
-    // for_each_key(pos2,key_list2) {
-    //     printf("%s,%s\n",KEY_NAME(pos2->key),KEY_VALUE(pos2->key));
-    // }
-    // free_key_list(key_list2);
+    struct Key_List *key_list2 =get_keys_from_chain_db_str_contains("test.db","va");
+    struct Key_List *pos2;
+    for_each_key(pos2,key_list2) {
+        printf("contains %s,%s\n",KEY_NAME(pos2->key),KEY_VALUE(pos2->key));
+    }
+    free_key_list(key_list2);
 
 
 

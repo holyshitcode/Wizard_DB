@@ -60,7 +60,7 @@ int insert_key_to_chain(struct Chain *target_chain, struct Key *key) {
 int delete_key_from_chain(struct Chain *target_chain, struct Key *key) {
     struct Node *target_chain_list = target_chain->node_list;
 
-    if(delete_node_having_key(target_chain_list, key) == 0) {
+    if(delete_node_having_key(&target_chain_list, key) == 0) {
         return 0;
     }
     return -1;

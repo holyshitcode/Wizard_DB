@@ -11,6 +11,8 @@ extern int database_count;
 struct Database {
     char database_name[25];
     struct Chain *chain_list;
+    //tree pointer will be added
+    //indexing base counter will be added
 };
 struct Database *get_database_by_name(char *database_name);
 int create_database(char *database_name);

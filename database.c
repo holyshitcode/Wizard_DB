@@ -7,6 +7,12 @@ struct Database *database_list[DATABASE_MAX];
 int database_count = 0;
 
 
+/*
+ * todo
+ * 데이터베이스 indexing counter 기준으로 키생성시에 카운터증가하는 키만들기 함수
+ * 데이터베이스 인덱스조회해서 duplicate 검사하는 함수
+ */
+
 int create_database(char *database_name) {
     //duplicate exception
     if (get_database_by_name(database_name) != NULL) {
@@ -102,7 +108,7 @@ static struct Key *get_key_from_chain_by_name(struct Chain *target_chain,  char 
 int insert_key_to_chain_db(char *database_name, char *chain_name, struct Key *key) {
     struct Database *found_database = get_database_by_name(database_name);
     struct Chain *target_chain = get_chain_from_database_by_name(database_name, chain_name);
-    //duplicate exception
+    //duplicate exception(will be changed by indexing)
     if (get_key_from_chain_by_name(target_chain,KEY_NAME(key))) {
         return -1;
     }
@@ -240,6 +246,8 @@ struct Key *get_key_from_chain_db_by_name(char *database_name, char *key_name) {
 
     return NULL;
 }
+
+
 
 
 
