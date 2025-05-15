@@ -11,9 +11,16 @@ int database_count = 0;
  * todo
  * 데이터베이스 indexing counter 기준으로 키생성시에 카운터증가하는 키만들기 함수
  * 데이터베이스 인덱스조회해서 duplicate 검사하는 함수
+ * done
  */
 
-struct Key *create_key_db(char *database_name, char *key_name, char *key_value) {
+/*
+ * todo
+ * primary key를 직접쓰는 모드와 자동증가모드로 선택할수있게 조정해야함
+ * 현재구현은 자동증가임
+ */
+
+struct Key *create_key_db(char *database_name, char *key_name, char *key_value, long primary_key) {
     struct Database *target_database = get_database_by_name(database_name);
     if (target_database == NULL) {
         return NULL;
@@ -22,15 +29,22 @@ struct Key *create_key_db(char *database_name, char *key_name, char *key_value) 
     if (created_key == NULL) {
         return NULL;
     }
-    target_database->index_counter++;
-    created_key->primary_key = target_database->index_counter;
-    if(insert_tree_node(&target_database->root, target_database->index_counter) == 0) {
-        return created_key;
+    if(target_database->primary_key_type == AUTO_INC) {
+        target_database->index_counter++;
+        created_key->primary_key = target_database->index_counter;
+        if(insert_tree_node(&target_database->root, target_database->index_counter) == 0) {
+            return created_key;
+        }
+    }else {
+        created_key->primary_key = primary_key;
+        if(insert_tree_node(&target_database->root, primary_key) == 0) {
+            return created_key;
+        }
     }
-
+    return NULL;
 }
 
-int create_database(char *database_name) {
+int create_database(char *database_name, enum PRIMARY_KEY_TYPE key_type) {
     //duplicate exception
     if (get_database_by_name(database_name) != NULL) {
         return -1;
@@ -48,6 +62,10 @@ int create_database(char *database_name) {
     //index tree
     created_database->root =  NULL;
     created_database->index_counter = -1;
+
+    //auto,manual selection
+    created_database->primary_key_type = key_type;
+
     database_list[database_count++] = created_database;
     return 0;
 }

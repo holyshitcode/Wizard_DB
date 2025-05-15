@@ -9,6 +9,10 @@
 extern struct Database *database_list[DATABASE_MAX];
 extern int database_count;
 
+enum PRIMARY_KEY_TYPE {
+    AUTO_INC, MANUAL
+};
+
 struct Database {
     char database_name[25];
     struct Chain *chain_list;
@@ -16,9 +20,11 @@ struct Database {
     long index_counter;
     //indexing base counter will be added
     struct Tree_Node *root;
+    enum PRIMARY_KEY_TYPE primary_key_type;
 };
+struct Key *create_key_db(char *database_name, char *key_name, char *key_value, long primary_key);
 struct Database *get_database_by_name(char *database_name);
-int create_database(char *database_name);
+int create_database(char *database_name, enum PRIMARY_KEY_TYPE key_type);
 int create_chain_into_database(char *database_name, char *chain_name);
 int delete_chain_from_database(char *database_name, char *chain_name);
 int insert_key_to_chain_db(char *database_name, char *chain_name, struct Key *key);

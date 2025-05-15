@@ -3,7 +3,7 @@
 
 
 struct Tree_Node {
-    int key;
+    long key;
     struct Tree_Node* left;
     struct Tree_Node* right;
 };
